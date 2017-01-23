@@ -47,7 +47,7 @@ app.on('ready', async () => {
   // Modify the user agent for all requests to the following urls.
   session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
     // Reject CSS and JS calls
-    if (details.url.match(/(?=^.*.js|.*.css)(?!^.*chrome-devtools).*/)) {
+    if (details.url.match(/^(?=.*\.(js|css))(?!.*(chrome-devtools|bootstrap\.min\.css)).*/)) {
       callback({cancel: true})
     } else {
       callback({cancel: false})
@@ -60,6 +60,7 @@ app.on('ready', async () => {
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
+
 
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();

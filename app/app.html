@@ -17,19 +17,12 @@
   </head>
   <body>
     <div id="root"></div>
-    <webview id="foo" src="https://www.github.com/" style="position:absolute;width:100%;height:100%;"></webview>
+    <webview id="mainView" src="https://www.github.com/" style="position:absolute;width:100%;height:100%;" disablewebsecurity></webview>
     <script>
-      const {webFrame} = require('electron')
-      webFrame.registerURLSchemeAsBypassingCSP('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
-      {
-        const script = document.createElement('script');
-        const port = process.env.PORT || 3000;
-        script.src = (process.env.HOT)
-          ? 'http://localhost:' + port + '/dist/bundle.js'
-          : './dist/bundle.js';
-        // HACK: Writing the script path should be done with webpack
-        document.body.appendChild(script);
-      }
+      const webview = document.getElementById('mainView')
+      webview.addEventListener('dom-ready', () => {
+        webview.insertCSS({'file': 'bootstrap.min.css'})
+      })
     </script>
   </body>
 </html>

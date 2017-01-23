@@ -20,8 +20,9 @@
     <webview id="mainView" src="https://www.github.com/" style="position:absolute;width:100%;height:100%;" disablewebsecurity></webview>
     <script>
       const webview = document.getElementById('mainView')
+      const styleString = require('css-to-string-loader!css-loader!./lib/bootstrap.min.css');
       webview.addEventListener('dom-ready', () => {
-        webview.insertCSS({'file': 'bootstrap.min.css'})
+        webview.insertCSS(styleString)
       })
     </script>
   </body>

@@ -1,4 +1,4 @@
-import { app, session, webFrame, BrowserWindow, Menu, shell } from 'electron';
+import { app, session, BrowserWindow, Menu, shell } from 'electron';
 
 let menu;
 let template;
@@ -43,32 +43,23 @@ const installExtensions = async () => {
 
 app.on('ready', async () => {
   await installExtensions();
-  let replaced = false
-
-  webFrame.registerURLSchemeAsBypassingCSP('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
 
   // Modify the user agent for all requests to the following urls.
   session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
     // Reject CSS and JS calls
-    if (details.url.includes('.css') || details.url.includes('.js')) {
-      if (replaced) {
-        callback({cancel: true})
-      } else {
-        replaced = true
-        callback({cancel: false, redirectURL: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'})
-      }
+    if (details.url.match(/(?=^.*.js|.*.css)(?!^.*chrome-devtools).*/)) {
+      callback({cancel: true})
     } else {
       callback({cancel: false})
     }
   })
 
   mainWindow = new BrowserWindow({
-    show: false,
     width: 1024,
     height: 728
   });
 
-  mainWindow.loadURL(`https://twitter.com`);
+  mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();

@@ -14,6 +14,9 @@ export default validate({
     }, {
       test: /\.json$/,
       loader: 'json-loader'
+    }, {
+      test: /\.css$/,
+      loader: 'css-to-string-loader!css-loader'
     }]
   },
 
